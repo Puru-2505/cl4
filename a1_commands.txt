@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# Start MongoDB service
+sudo service mongodb start
+
+# Access MongoDB shell
+mongo <<EOF
+use samarth
+
+# Create a collection named 'emp_info'
+db.createCollection("emp_info")
+
+# Insert documents into the 'emp_info' collection
+db.emp_info.insert({id:"E101",ename:"abc",age:25,dept:"tester",sal:25000})
+db.emp_info.insert({id:"E102",ename:"pqr",age:50,dept:"R&D",sal:50000})
+db.emp_info.insert({id:"E103",ename:"def",age:56,dept:"R&D",sal:75000})
+db.emp_info.insert({id:"E104",ename:"xyz",age:28,dept:"dev",sal:50000})
+db.emp_info.insert({id:"E105",ename:"mno",age:30,dept:"tester",sal:55000})
+
+# View all documents in the collection
+db.emp_info.find()
+
+# View documents in a formatted way
+db.emp_info.find().pretty()
+
+# Query documents where salary is greater than or equal to 50000
+db.emp_info.find({sal:{$gte:50000}})
+
+# Query documents where age is 50 and project only the department
+db.emp_info.find({age:50},{dept:"R&D"})
+
+# Remove documents where the department is "tester"
+db.emp_info.remove({dept:"tester"})
+
+# Update documents where the department is "dev" to "R&D"
+db.emp_info.update({dept:"dev"},{$set:{dept:"R&D"}},{multi:true})
+
+# Find and update a single document where the department is "tester" to "R&D"
+db.emp_info.update({dept:"tester"},{dept:"R&D"})
+
+# Query documents where the department is "tester" or "R&D"
+db.emp_info.find({$or:[{dept:"tester"},{dept:"R&D"}]})
+EOF
